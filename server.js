@@ -18,7 +18,7 @@ const app = express();
 app.use(express.json()); // For parsing JSON requests
 
 // Allowed origins for CORS
-const allowedOrigins = ['https://gurudev-frontend-gamma.vercel.app/'];
+const allowedOrigins = ['https://gurudev-frontend-gamma.vercel.app'];
 
 // CORS configuration
 app.use(cors({
@@ -35,7 +35,7 @@ app.use(cors({
 
 // Enable pre-flight for all routes
 app.options('*', (req, res) => {
-  res.setHeader('Access-Control-Allow-Origin', 'https://gurudev-frontend-gamma.vercel.app/');
+  res.setHeader('Access-Control-Allow-Origin', 'https://gurudev-frontend-gamma.vercel.app');
   res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
   res.setHeader('Access-Control-Allow-Credentials', 'true');
