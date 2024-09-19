@@ -18,7 +18,7 @@ const app = express();
 app.use(express.json()); // For parsing JSON requests
 
 // Allowed origins for CORS
-const allowedOrigins = ['https://gurudev-frontend-gamma.vercel.app'];
+const allowedOrigins = ['https://gurudev-frontend-gamma.vercel.app', 'http://localhost:3000'];
 
 // CORS configuration
 app.use(cors({
@@ -30,17 +30,17 @@ app.use(cors({
     }
   },
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  credentials: true
+  credentials: true,
+  allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
-// Enable pre-flight for all routes
-app.options('*', (req, res) => {
-  res.setHeader('Access-Control-Allow-Origin', 'https://gurudev-frontend-gamma.vercel.app');
-  res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-  res.setHeader('Access-Control-Allow-Credentials', 'true');
-  res.sendStatus(200); // Send HTTP OK status for preflight requests
-});
+// Preflight request middleware (for all routes)
+app.options('*', cors({
+  origin: allowedOrigins,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true
+}));
 
 // Routes
 app.use('/api/auth', authRoutes);
