@@ -35,7 +35,11 @@ app.use(cors({
 
 // Enable pre-flight for all routes
 app.options('*', (req, res) => {
-  res.setHeader('Access-Control-Allow-Origin', 'https://gurudev-frontend-gamma.vercel.app');
+  const origin = req.headers.origin;
+  if (allowedOrigins.includes(origin)) {
+    res.setHeader('Access-Control-Allow-Origin', origin);  // Only allow the origin if it's in the list
+  }
+  // res.setHeader('Access-Control-Allow-Origin',allowedOrigins );
   res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
   res.setHeader('Access-Control-Allow-Credentials', 'true');
