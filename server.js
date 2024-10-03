@@ -17,20 +17,21 @@ const app = express();
 // Middleware
 app.use(express.json()); // For parsing JSON requests
 
-// Allowed origins for CORS
-const allowedOrigins = ['https://gurudev-frontend-gamma.vercel.app'];
+// Allowed origins for CORS (list trusted domains)
+const allowedOrigins = ['https://gurudev-frontend-gamma.vercel.app', 'https://another-trusted-domain.com'];
 
-// CORS configuration
+// CORS configuration to allow requests from specific origins
 app.use(cors({
   origin: function (origin, callback) {
+    // Check if the incoming origin is in the allowedOrigins list or if it's undefined (for server-to-server calls)
     if (!origin || allowedOrigins.indexOf(origin) !== -1) {
-      callback(null, true);
+      callback(null, true);  // Allow request
     } else {
-      callback(new Error('Not allowed by CORS'));
+      callback(new Error('Not allowed by CORS'));  // Block request
     }
   },
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  credentials: true
+  credentials: true // Allow credentials (cookies, authorization headers)
 }));
 
 // Enable pre-flight for all routes
@@ -39,11 +40,10 @@ app.options('*', (req, res) => {
   if (allowedOrigins.includes(origin)) {
     res.setHeader('Access-Control-Allow-Origin', origin);  // Only allow the origin if it's in the list
   }
-  // res.setHeader('Access-Control-Allow-Origin',allowedOrigins );
   res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
   res.setHeader('Access-Control-Allow-Credentials', 'true');
-  res.sendStatus(200); // Send HTTP OK status for preflight requests
+  res.sendStatus(200);  // Send HTTP OK status for preflight requests
 });
 
 // Routes
