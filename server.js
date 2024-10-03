@@ -1,8 +1,8 @@
 const express = require('express');
 const connectDB = require('./config/db');
 const authRoutes = require('./routes/authRoutes');
-const paymentRoutes = require('./routes/paymentRoutes');
-const shippingRoutes = require('./routes/shippingRoutes');
+const paymentRoutes = require('./routes/paymentRoutes');  // Braintree routes
+const shippingRoutes = require('./routes/shippingRoutes'); // Shipping routes
 const dotenv = require('dotenv');
 const cors = require('cors');
 
@@ -17,36 +17,30 @@ const app = express();
 // Middleware
 app.use(express.json()); // For parsing JSON requests
 
-// Define allowed origins
-const allowedOrigins = [process.env.BASE_URL];
+// Allowed origins for CORS
+const allowedOrigins = ['https://gurudev-frontend-a9tw.vercel.app'];
 
 // CORS configuration
 app.use(cors({
-  origin: (origin, callback) => {
-    if (!origin || allowedOrigins.includes(origin)) {
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
       callback(null, true);
     } else {
       callback(new Error('Not allowed by CORS'));
     }
   },
-  credentials: true, // Allow credentials (cookies, authorization headers, etc.)
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'], // Allow headers
+  credentials: true
 }));
 
-// Pre-flight request handler (for OPTIONS requests)
-app.options('*', cors({
-  origin: (origin, callback) => {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-}));
+// Enable pre-flight for all routes
+app.options('*', (req, res) => {
+  res.setHeader('Access-Control-Allow-Origin', 'https://gurudev-frontend-a9tw.vercel.app');
+  res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
+  res.sendStatus(200); // Send HTTP OK status for preflight requests
+});
 
 // Routes
 app.use('/api/auth', authRoutes);
@@ -58,11 +52,10 @@ app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).json({
     message: 'Internal Server Error',
-    error: err.message,
+    error: err.message
   });
 });
 
 // Start the server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-
