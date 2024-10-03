@@ -18,7 +18,7 @@ const app = express();
 app.use(express.json()); // For parsing JSON requests
 
 // Define allowed origins
-const allowedOrigins = [process.env.BASE_URL, 'http://localhost:3000'];
+const allowedOrigins = [process.env.BASE_URL];
 
 // CORS configuration
 app.use(cors({
