@@ -19,10 +19,11 @@ app.use(express.json()); // For parsing JSON requests
 
 // CORS configuration to allow all origins
 app.use(cors({
-  origin: '*', // Allow all origins
+  origin: 'https://gurudev-frontend-gamma.vercel.app/', // Replace with your frontend URL
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  credentials: true
+  credentials: true, // If your frontend requires credentials like cookies
 }));
+
 
 // Enable pre-flight for all routes
 app.options('*', (req, res) => {
