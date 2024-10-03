@@ -9,7 +9,7 @@
   "routes": [
     {
       "src": "/(.*)",
-      "destination": "/server.js",
+      "dest": "/server.js",
       "headers": {
         "Access-Control-Allow-Origin": "https://gurudev-frontend-gamma.vercel.app",
         "Access-Control-Allow-Credentials": "true",
