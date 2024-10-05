@@ -18,7 +18,7 @@ const app = express();
 app.use(express.json()); // For parsing JSON requests
 
 // Allowed origins for CORS
-const allowedOrigins = ['https://gurudev-frontend-gamma.vercel.app/'];
+const allowedOrigins = ['https://gurudev-frontend-gamma.vercel.app'];
 
 // CORS configuration
 app.use(cors({
